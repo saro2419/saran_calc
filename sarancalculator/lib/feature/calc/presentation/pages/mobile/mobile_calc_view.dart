@@ -139,7 +139,7 @@ class _MobileCalcViewState extends State<MobileCalcView> {
 
       buttonRow.add(
         Expanded(
-          flex: (value == '=' && evenRow == true) ? 5 : 2,
+          flex: (value == '=' && evenRow == true) ? 7 : 3,
           child: CalcValueButton(
             value: value,
             onPressed: () {
