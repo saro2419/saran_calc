@@ -11,10 +11,11 @@ class CalcValueField extends StatelessWidget {
     return CustomTextfield(
       controller: controller,
       borderWidth: 2,
-      fontSize: FontsizeConstant.lg,
-      minLines: 3,
-      maxLines: 3,
+      fontSize: PageHeading.small,
+      minLines: 2,
+      maxLines: 2,
       readOnly: true,
+      showCursor: false,
     );
   }
 }

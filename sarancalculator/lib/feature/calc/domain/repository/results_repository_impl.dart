@@ -1,20 +1,24 @@
-import '../../data/repository/results_repository.dart';
-import '../entity/results_entity.dart';
-import '../../data/datasource/results_local_datasource.dart';
-import '../../data/datasource/results_remote_datasource.dart';
+import 'package:math_expressions/math_expressions.dart';
+import 'package:sarancalculator/feature/calc/data/model/results_model.dart';
+import 'package:sarancalculator/feature/calc/data/repository/results_repository.dart';
+import 'package:sarancalculator/feature/calc/domain/entity/results_entity.dart';
 
 class ResultsRepositoryImpl implements ResultsRepository {
-  final ResultsLocalDatasource local;
-  final ResultsRemoteDatasource remote;
-
-  ResultsRepositoryImpl({required this.local, required this.remote});
-
   @override
-  Future<ResultsEntity> getResults() async {
+  Future<ResultsEntity> getResult(String expression) async {
     try {
-      return await remote.getResults();
-    } catch (_) {
-      return await local.getResults();
+      Parser parser = Parser();
+      Expression exp = parser.parse(expression);
+      ContextModel cm = ContextModel();
+      final double answer = exp.evaluate(EvaluationType.REAL, cm);
+      final model = ResultsModel(
+        expression: expression,
+        result: answer.toString(),
+      );
+
+      return model.toEntity();
+    } catch (e) {
+      throw Exception("Errrrorrrrr: $e");
     }
   }
 }

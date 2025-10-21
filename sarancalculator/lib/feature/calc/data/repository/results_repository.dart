@@ -1,5 +1,5 @@
-import '../../domain/entity/results_entity.dart';
+import 'package:sarancalculator/feature/calc/domain/entity/results_entity.dart';
 
 abstract class ResultsRepository {
-  Future<ResultsEntity> getResults();
+  Future<ResultsEntity> getResult(String expression);
 }

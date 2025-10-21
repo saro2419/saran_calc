@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sarancalculator/feature/calc/presentation/bloc/get_results_bloc.dart';
+import 'package:sarancalculator/feature/calc/presentation/bloc/results_bloc.dart';
 import 'package:sarancalculator/feature/calc/presentation/pages/calc_page.dart';
 
 import 'init_dependencies.dart';
@@ -19,8 +19,8 @@ class CalcApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<GetResultsBloc>(
-          create: (context) => serviceLocator<GetResultsBloc>(),
+        BlocProvider<ResultsBloc>(
+          create: (context) => serviceLocator<ResultsBloc>(),
         ),
       ],
       child: MaterialApp(

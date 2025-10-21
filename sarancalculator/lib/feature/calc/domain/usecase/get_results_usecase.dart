@@ -1,13 +1,12 @@
 import 'package:sarancalculator/feature/calc/data/repository/results_repository.dart';
-
-import '../entity/results_entity.dart';
+import 'package:sarancalculator/feature/calc/domain/entity/results_entity.dart';
 
 class GetResultsUsecase {
   final ResultsRepository repository;
 
-  GetResultsUsecase(this.repository);
+  GetResultsUsecase({required this.repository});
 
-  Future<ResultsEntity> call() async {
-    return await repository.getResults();
+  Future<ResultsEntity> call(String expression) async{
+    return await repository.getResult(expression);
   }
 }

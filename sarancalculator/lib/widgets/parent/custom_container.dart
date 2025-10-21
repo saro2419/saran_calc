@@ -45,8 +45,9 @@ class CustomContainer extends StatelessWidget {
       clipBehavior: clipBehavior,
       foregroundDecoration: foregroundDecoration,
       decoration: BoxDecoration(
+        border: Border.all(color: ColorConstant.primary, width: 4),
         gradient: LinearGradient(
-          colors: [ColorConstant.primary, ColorConstant.background],
+          colors: [ColorConstant.background, ColorConstant.background],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

@@ -95,7 +95,11 @@ class CustomTextfield extends StatelessWidget {
       buildCounter: buildCounter,
       style:
           style ??
-          TextStyle(color: ColorConstant.secondary, fontSize: fontSize ?? 14),
+          TextStyle(
+            color: ColorConstant.secondary,
+            fontSize: fontSize ?? 14,
+            letterSpacing: 2,
+          ),
       decoration: InputDecoration(
         hintText: hintText ?? 'Enter Value',
         hintStyle: hintStyle ?? const TextStyle(color: ColorConstant.grey),
@@ -105,15 +109,15 @@ class CustomTextfield extends StatelessWidget {
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         // Adding borders
-        enabledBorder: _buildBorder(ColorConstant.secondary),
-        focusedBorder: _buildBorder(ColorConstant.secondary),
+        enabledBorder: _buildBorder(ColorConstant.primary),
+        focusedBorder: _buildBorder(ColorConstant.primary),
         errorBorder: _buildBorder(ColorConstant.roseRed),
         focusedErrorBorder: _buildBorder(ColorConstant.roseRed),
         disabledBorder: _buildBorder(Colors.grey.shade600),
       ),
       readOnly: readOnly,
       showCursor: showCursor,
-      cursorColor: cursorColor ?? ColorConstant.secondary,
+      cursorColor: cursorColor ?? ColorConstant.white,
       textAlign: textAlign,
     );
   }

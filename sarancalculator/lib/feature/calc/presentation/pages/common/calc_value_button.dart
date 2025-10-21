@@ -14,16 +14,17 @@ class CalcValueButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double screenHeight = MediaQuery.of(context).size.height;
     return InkWell(
       onTap: onPressed,
-      splashColor: ColorConstant.secondary,
+      splashColor: ColorConstant.white,
       child: Container(
-        height: 60,
+        height: screenHeight * 0.067,
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: ColorConstant.secondary,
-              blurRadius: 10,
+              color: ColorConstant.white,
+              blurRadius: 7,
               spreadRadius: 1,
               offset: Offset(0, 0), // subtle shadow below the container
             ),
@@ -39,7 +40,7 @@ class CalcValueButton extends StatelessWidget {
           child: Text(
             value,
             style: TextStyle(
-              fontSize: FontsizeConstant.xl,
+              fontSize: PageSubHeading.small,
               fontWeight: FontWeight.bold,
             ),
           ),
