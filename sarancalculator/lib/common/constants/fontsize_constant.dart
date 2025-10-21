@@ -3,7 +3,7 @@ class PageHeading {
 }
 
 class PageSubHeading {
-  static const double small = 18;
+  static const double small = 22;
 }
 
 class PageLabel {

@@ -7,6 +7,7 @@ import 'package:sarancalculator/feature/calc/presentation/bloc/results_state.dar
 import 'package:sarancalculator/feature/calc/presentation/pages/common/calc_header.dart';
 import 'package:sarancalculator/feature/calc/presentation/pages/common/calc_value_button.dart';
 import 'package:sarancalculator/feature/calc/presentation/pages/common/calc_value_field.dart';
+import 'package:sarancalculator/feature/calc/presentation/pages/common/result_error_dialog.dart';
 import 'package:sarancalculator/widgets/parent/custom_container.dart';
 
 class MobileCalcView extends StatefulWidget {
@@ -27,84 +28,99 @@ class _MobileCalcViewState extends State<MobileCalcView> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: CustomContainer(
-        child: Padding(
-          padding: const EdgeInsets.all(SpacingConstant.md),
-          child: Column(
-            children: [
-              // Header section (small)
-              Expanded(flex: 1, child: Center(child: CalcHeader())),
+    return BlocListener<ResultsBloc, ResultsState>(
+      listenWhen: (previous, current) =>
+          current.errorMessage.isNotEmpty &&
+          previous.errorMessage != current.errorMessage,
+      listener: (context, state) async {
+        await showDialog(
+          context: context,
+          builder: (context) =>
+              Center(child: ResultErrorDialog(message: state.errorMessage)),
+        );
 
-              // Value field section (medium)
-              Expanded(
-                flex: 4,
-                child: BlocBuilder<ResultsBloc, ResultsState>(
-                  builder: (context, state) {
-                    final double? parsed = double.tryParse(state.result);
-                    final String formattedValue = parsed != null
-                        ? parsed
-                              .toStringAsFixed(10)
-                              .replaceFirst(RegExp(r'\.?0+$'), '')
-                        : state.result;
+        // ignore: invalid_use_of_visible_for_testing_member, use_build_context_synchronously
+        context.read<ResultsBloc>().emit(state.copyWith(errorMessage: ''));
+      },
+      child: SafeArea(
+        child: CustomContainer(
+          child: Padding(
+            padding: const EdgeInsets.all(SpacingConstant.md),
+            child: Column(
+              children: [
+                // Header section (small)
+                Expanded(flex: 1, child: Center(child: CalcHeader())),
 
-                    final String value = state.result.isNotEmpty
-                        ? '${state.expression}\n= $formattedValue'
-                        : state.expression;
+                // Value field section (medium)
+                Expanded(
+                  flex: 4,
+                  child: BlocBuilder<ResultsBloc, ResultsState>(
+                    builder: (context, state) {
+                      final double? parsed = double.tryParse(state.result);
+                      final String formattedValue = parsed != null
+                          ? parsed
+                                .toStringAsFixed(10)
+                                .replaceFirst(RegExp(r'\.?0+$'), '')
+                          : state.result;
 
-                    _valueController.text = value;
-                    return Center(
-                      child: CalcValueField(controller: _valueController),
-                    );
-                  },
+                      final String value = state.result.isNotEmpty
+                          ? '${state.expression}\n= $formattedValue'
+                          : state.expression;
+
+                      _valueController.text = value;
+                      return Center(
+                        child: CalcValueField(controller: _valueController),
+                      );
+                    },
+                  ),
                 ),
-              ),
 
-              // Keypad section (large)
-              Expanded(
-                flex: 14,
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final rowHeight = constraints.maxHeight / 7;
+                // Keypad section (large)
+                Expanded(
+                  flex: 14,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final rowHeight = constraints.maxHeight / 7;
 
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        buildButtonRow(
-                          values: ['1', '2', '+'],
-                          rowHeight: rowHeight,
-                        ),
-                        buildButtonRow(
-                          values: ['3', '4', '-'],
-                          rowHeight: rowHeight,
-                        ),
-                        buildButtonRow(
-                          values: ['5', '6', '*'],
-                          rowHeight: rowHeight,
-                        ),
-                        buildButtonRow(
-                          values: ['7', '8', '/'],
-                          rowHeight: rowHeight,
-                        ),
-                        buildButtonRow(
-                          values: ['9', '0', '.'],
-                          rowHeight: rowHeight,
-                        ),
-                        buildButtonRow(
-                          values: ['(', ')', 'D'],
-                          rowHeight: rowHeight,
-                        ),
-                        buildButtonRow(
-                          values: ['CE', '='],
-                          rowHeight: rowHeight,
-                          evenRow: true,
-                        ),
-                      ],
-                    );
-                  },
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          buildButtonRow(
+                            values: ['1', '2', '+'],
+                            rowHeight: rowHeight,
+                          ),
+                          buildButtonRow(
+                            values: ['3', '4', '-'],
+                            rowHeight: rowHeight,
+                          ),
+                          buildButtonRow(
+                            values: ['5', '6', '*'],
+                            rowHeight: rowHeight,
+                          ),
+                          buildButtonRow(
+                            values: ['7', '8', '/'],
+                            rowHeight: rowHeight,
+                          ),
+                          buildButtonRow(
+                            values: ['9', '0', '.'],
+                            rowHeight: rowHeight,
+                          ),
+                          buildButtonRow(
+                            values: ['(', ')', 'D'],
+                            rowHeight: rowHeight,
+                          ),
+                          buildButtonRow(
+                            values: ['CE', '='],
+                            rowHeight: rowHeight,
+                            evenRow: true,
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
