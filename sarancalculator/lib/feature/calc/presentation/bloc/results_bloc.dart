@@ -38,6 +38,8 @@ class ResultsBloc extends Bloc<ResultsEvent, ResultsState> {
       0,
       state.expression.length - 1,
     );
+
+    if (expression.isEmpty) emit(state.copyWith(result: ''));
     emit(state.copyWith(expression: expression));
   }
 
@@ -46,11 +48,12 @@ class ResultsBloc extends Bloc<ResultsEvent, ResultsState> {
     Emitter<ResultsState> emit,
   ) {
     emit(
-      ResultsState(
+      state.copyWith(
         expression: '',
         result: '',
         isLoading: false,
         errorMessage: '',
+        historyList: state.historyList
       ),
     );
   }
@@ -66,9 +69,29 @@ class ResultsBloc extends Bloc<ResultsEvent, ResultsState> {
 
       final resultEntity = await usecase.call(expression);
 
-      emit(state.copyWith(isLoading: false, result: resultEntity.result));
+      HistoryItem newItem = HistoryItem(
+        expression: expression,
+        result: resultEntity.result,
+      );
+
+      final updatedHistory = List<HistoryItem>.from(state.historyList)
+        ..add(newItem);
+
+      emit(
+        state.copyWith(
+          isLoading: false,
+          result: resultEntity.result,
+          historyList: updatedHistory,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(errorMessage: e.toString(), isLoading: false));
     }
   }
+}
+
+class HistoryItem {
+  final String expression;
+  final String result;
+  HistoryItem({required this.expression, required this.result});
 }
